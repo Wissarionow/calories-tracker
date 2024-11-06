@@ -4,6 +4,7 @@ import base64
 import instructor
 from pydantic import BaseModel
 from dotenv import dotenv_values
+from database import return_reqest , connect_to_db, disconnect
 
 class CalorieAndMacroToday:
     calories: int
@@ -69,6 +70,10 @@ if option == "Upload a photo":
 elif option == "Take a picture from camera":
     image = st.camera_input("Take a picture")
 
+connection = connect_to_db()
+test = return_reqest(connection, "SELECT version();")
+st.write(test)
+disconnect(connection)
 
 # If an image is provided, display it and prepare it for OpenAI
 if image is not None:
