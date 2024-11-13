@@ -1,32 +1,36 @@
-import psycopg2
+import mysql.connector
+from mysql.connector import Error
 from dotenv import dotenv_values
+from typing import Any
 
 env = dotenv_values(".env")
 
-#establish connection
+#establish connection, if None is returned, connection failed
 def connect_to_db():
     try:
-        connection = psycopg2.connect(
+        connection = mysql.connector.connect(
             host="localhost",  
             database=env["DATABASE_NAME"],  
             user=env["DATABASE_USER"],  
-            password=env["DATABASE_PASSWORD"]  
+            password=env["DATABASE_PASSWORD"],
+            auth_plugin='mysql_native_password'  
         )
-        return connection
-    except (Exception, psycopg2.Error) as error:
-        print("Error while connecting to PostgreSQL", error)
+        
+        if connection.is_connected():
+            return connection
+        
+    except Error as e:
+        print("Error while connecting to MySQL", e)
         return None
 
 #return request
-def return_reqest(connection,query):
-    try:
-        cursor = connection.cursor()
-        cursor.execute(query)
-        return cursor.fetchall()
-    except (Exception, psycopg2.Error) as error:
-        print("Error while connecting to PostgreSQL", error)
-        return None
+def return_reqest(connection: Any,query: str):
+    cursor = connection.cursor()
+    cursor.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+    return results
 
 #void disconnect 
-def disconnect(connection):
+def disconnect(connection:any):
     connection.close()
