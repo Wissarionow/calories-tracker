@@ -9,12 +9,12 @@ env = dotenv_values(".env")
 def connect_to_db():
     try:
         connection = mysql.connector.connect(
-            host="localhost",  
-            database=env["DATABASE_NAME"],  
-            user=env["DATABASE_USER"],  
-            password=env["DATABASE_PASSWORD"],
-            auth_plugin='mysql_native_password'  
-        )
+        host=env['DB_HOST'],        
+        user=env['DB_USER'],        
+        password=env['DB_PASS'],        
+        database=env['DB_NAME'],      
+        auth_plugin=env['DB_AUTH_PLUGIN']
+    )
         
         if connection.is_connected():
             return connection
