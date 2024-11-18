@@ -1,10 +1,11 @@
 
-from openai import OpenAI
+#from openai import OpenAI
 import base64
 import instructor
 from pydantic import BaseModel
 from dotenv import dotenv_values
-
+from langfuse.decorators import observe
+from langfuse.openai import OpenAI
 
 class Meal(BaseModel):
     name: str
@@ -13,7 +14,8 @@ class Meal(BaseModel):
     carbs: int
     fats: int
     fiber: int
-
+    
+@observe()
 def fill_meal(image):
     
     env = dotenv_values(".env")
