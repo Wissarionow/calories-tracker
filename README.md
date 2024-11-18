@@ -9,3 +9,8 @@ To do:
 &nbsp;&nbsp;&nbsp;&nbsp;*4 separate request to OpenAI with photo<br>
 &nbsp;&nbsp;&nbsp;&nbsp;*Depending on user goals remove highest or lowest bet<br>
 &nbsp;&nbsp;&nbsp;&nbsp;*Count mean of rest of resoults<br>
+-Adding meals by hand<br>
+
+<br>
+Optional:<br>
+-Add functionality allowing scanning barcodes from meals<br>
