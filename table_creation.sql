@@ -1,6 +1,7 @@
 -- Table will contain meals of users and their nutritional values
 CREATE TABLE `food_intake` (
   `user_id` integer,
+  `meal_name` varchar(255),
   `calories` integer,
   `protein` integer,
   `carbs` integer,
