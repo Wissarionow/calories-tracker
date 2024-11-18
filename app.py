@@ -17,7 +17,19 @@ def empty_calories_today():
     temp.carbs=0
     temp.fats=0
     temp.fiber=0
-    return temp    
+    return temp   
+ 
+def custom_progress_bar(current, goal, label):
+    percentage = current / goal
+    color = "red" if percentage > 1 else "green"
+    st.markdown(f"""
+        <div style="border: 1px solid #ddd; border-radius: 4px; width: 100%; background-color: #f3f3f3;">
+            <div style="width: {min(percentage, 1) * 100}%; background-color: {color}; padding: 5px 0; border-radius: 4px;">
+                <span style="margin-left: 10px; color: white;">{label}</span>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
 
 def fill_calories_today(connection, usr_id,class_calories):
     #for test purposes only
@@ -54,7 +66,7 @@ def main():
     if st.session_state.usr_id is not None:
         username = return_reqest(connection, f"SELECT username FROM users WHERE id = {st.session_state.usr_id}")
         st.title(f"Welcome, {username[0][0]}")
-        st.text("Here is your calories and macro for today")
+        st.write("Here is your calories and macro for today")
         
         results = return_reqest(connection, f"SELECT daily_calories, daily_protein, daily_carbs, daily_fats, daily_fiber FROM users WHERE id = {st.session_state.usr_id}")
         daily_goals = results[0]
@@ -62,38 +74,32 @@ def main():
         st.session_state.usr_intake = fill_calories_today(connection, st.session_state.usr_id, st.session_state.usr_intake)
             
         st.write("Calories Intake")
-        st.progress(st.session_state.usr_intake.calories / daily_goals[0])
-        st.write(f"{st.session_state.usr_intake.calories} / {daily_goals[0]} kcal")
+        custom_progress_bar(st.session_state.usr_intake.calories, daily_goals[0], f"{st.session_state.usr_intake.calories} / {daily_goals[0]} kcal")
         
         st.write("Protein Intake")
-        st.progress(st.session_state.usr_intake.protein / daily_goals[1])
-        st.write(f"{st.session_state.usr_intake.protein} / {daily_goals[1]} g")
+        custom_progress_bar(st.session_state.usr_intake.protein, daily_goals[1], f"{st.session_state.usr_intake.protein} / {daily_goals[1]} g")
         
         st.write("Carbs Intake")
-        st.progress(st.session_state.usr_intake.carbs / daily_goals[2])
-        st.write(f"{st.session_state.usr_intake.carbs} / {daily_goals[2]} g")
+        custom_progress_bar(st.session_state.usr_intake.carbs, daily_goals[2], f"{st.session_state.usr_intake.carbs} / {daily_goals[2]} g")
         
-        st.write("Fats Intake")#???
-        st.progress(st.session_state.usr_intake.fats / daily_goals[3])
-        st.write(f"{st.session_state.usr_intake.fats} / {daily_goals[3]} g")
+        st.write("Fats Intake")
+        custom_progress_bar(st.session_state.usr_intake.fats, daily_goals[3], f"{st.session_state.usr_intake.fats} / {daily_goals[3]} g")
         
         st.write("Fiber Intake")
-        st.progress(st.session_state.usr_intake.fiber / daily_goals[4])
-        st.write(f"{st.session_state.usr_intake.fiber} / {daily_goals[4]} g")
+        custom_progress_bar(st.session_state.usr_intake.fiber, daily_goals[4], f"{st.session_state.usr_intake.fiber} / {daily_goals[4]} g")
     
-    
-    #adding meals
-    option = st.selectbox("Choose an option", ("Upload a photo", "Take a picture from camera"))
-    image = None
-    if option == "Upload a photo":
-        image = st.file_uploader("Upload a photo", type=["png", "jpg", "jpeg"])
-    elif option == "Take a picture from camera":
-        image = st.camera_input("Take a picture")
+        #adding meals
+        option = st.selectbox("Choose an option", ("Upload a photo", "Take a picture from camera"))
+        image = None
+        if option == "Upload a photo":
+            image = st.file_uploader("Upload a photo", type=["png", "jpg", "jpeg"])
+        elif option == "Take a picture from camera":
+            image = st.camera_input("Take a picture")
 
-    if image is not None:
-        with open("captured_image.png", "wb") as f:
-            f.write(image.getbuffer())
-    
+        if image is not None:
+            with open("captured_image.png", "wb") as f:
+                f.write(image.getbuffer())
+        
 
 if __name__ == "__main__":
     main()
