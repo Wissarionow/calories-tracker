@@ -39,6 +39,12 @@ def db_login(connection: Any, username: str, password: str):
     else:
         return False
     
+def add_meal(connection: Any, usr_id: int, meal_name: str, calories: int, protein: int, carbs: int, fats: int, fiber: int):
+    cursor = connection.cursor()
+    cursor.execute(f"INSERT INTO food_intake (user_id, meal_name, calories, protein, carbs, fats, fiber,day) VALUES ({usr_id}, '{meal_name}', {calories}, {protein}, {carbs}, {fats}, {fiber}, CURDATE())")
+    connection.commit()
+    cursor.close()
+    
     
 #void disconnect 
 def disconnect(connection:any):
