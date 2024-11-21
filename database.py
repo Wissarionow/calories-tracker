@@ -23,7 +23,6 @@ def connect_to_db():
         print("Error while connecting to MySQL", e)
         return None
 
-#return request
 def return_reqest(connection: Any,query: str):
     cursor = connection.cursor()
     cursor.execute(query)
@@ -38,7 +37,7 @@ def db_login(connection: Any, username: str, password: str):
         return True
     else:
         return False
-    
+
 def add_meal(connection: Any, usr_id: int, meal_name: str, calories: int, protein: int, carbs: int, fats: int, fiber: int):
     cursor = connection.cursor()
     cursor.execute(f"INSERT INTO food_intake (user_id, meal_name, calories, protein, carbs, fats, fiber,day) VALUES ({usr_id}, '{meal_name}', {calories}, {protein}, {carbs}, {fats}, {fiber}, CURDATE())")

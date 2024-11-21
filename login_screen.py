@@ -19,3 +19,13 @@ def login_screen():
             st.error('Incorrect password or username')
 
     return st.session_state.usr_id
+
+
+# def register_screen():
+#
+#     st.title('Please register')
+#     username = st.text_input('Username')
+#     password = st.text_input('Password', type='password')
+#     weight = st.number_input('How much do you weight?', min_value=0)
+#     height = st.number_input('How tall are you?', min_value=0)
+    
