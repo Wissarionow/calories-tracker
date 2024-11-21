@@ -48,3 +48,9 @@ def add_meal(connection: Any, usr_id: int, meal_name: str, calories: int, protei
 #void disconnect 
 def disconnect(connection:any):
     connection.close()
+    
+def create_user(connection: Any, username: str, password: str, daily_calories: int, daily_protein: int, daily_carbs: int, daily_fats: int, daily_fiber: int):
+    cursor = connection.cursor()
+    cursor.execute(f"INSERT INTO users (username, password, daily_calories, daily_protein, daily_carbs, daily_fats, daily_fiber) VALUES ('{username}', '{password}', {daily_calories}, {daily_protein}, {daily_carbs}, {daily_fats}, {daily_fiber})")
+    connection.commit()
+    cursor.close()
