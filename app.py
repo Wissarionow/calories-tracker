@@ -2,6 +2,7 @@ import streamlit as st
 from database import return_reqest, connect_to_db, disconnect, add_meal
 from login_screen import login_screen
 from ai_func import fill_meal, Meal
+import tempfile
 
 class CalorieAndMacroToday:
     calories: int
@@ -74,6 +75,17 @@ def main():
     if st.session_state.usr_id is not None:
         connection=connect_to_db()
         
+    if 'cur_meal' not in st.session_state:
+        st.session_state.cur_meal = Meal(
+            name="Add your meal",
+            calories=0,
+            protein=0,
+            carbs=0,
+            fats=0,
+            fiber=0
+        )
+        
+        
     # calories progress bars
     if st.session_state.usr_id is not None:
         username = return_reqest(connection, f"SELECT username FROM users WHERE id = {st.session_state.usr_id}")
@@ -85,6 +97,7 @@ def main():
         
         st.session_state.usr_intake=empty_calories_today()
         st.session_state.usr_intake = fill_calories_today(connection, st.session_state.usr_id, st.session_state.usr_intake)
+        
         
         col1, col2 = st.columns(2)
         
@@ -113,19 +126,34 @@ def main():
             # adding meals from photo
             option = st.selectbox("Choose an option", ("Upload a photo", "Take a picture from camera"))
             image = None
+            
             if option == "Upload a photo":
                 image = st.file_uploader("Upload a photo", type=["png", "jpg", "jpeg"])
             elif option == "Take a picture from camera":
                 image = st.camera_input("Take a picture")
+
+            if image is not None:
+                st.image(image, use_column_width=True)
+
+
+            # Save the uploaded file to a temporary location
+                with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+                    tmp_file.write(image.getbuffer())
+                    tmp_file_path = tmp_file.name
+
+            # Pass the file path to the fill_meal function
+                st.session_state.cur_meal = fill_meal(tmp_file_path)
+            # st.write(st.session_state.cur_meal)
                 
             #manually adding meals
             st.write("Add a meal")
-            meal_name = st.text_input("Meal name")
-            calories = st.number_input("Calories", value=0, min_value=0)
-            protein = st.number_input("Protein", value=0, min_value=0)
-            carbs = st.number_input("Carbs", value=0, min_value=0)
-            fats = st.number_input("Fats", value=0, min_value=0)
-            fiber = st.number_input("Fiber", value=0, min_value=0)
+            meal_name = st.text_input("Meal name", value=st.session_state.cur_meal.name) 
+            calories = st.number_input("Calories", value=st.session_state.cur_meal.calories, min_value=0)
+            protein = st.number_input("Protein", value=st.session_state.cur_meal.protein, min_value=0)
+            carbs = st.number_input("Carbs", value=st.session_state.cur_meal.carbs, min_value=0)
+            fats = st.number_input("Fats", value=st.session_state.cur_meal.fats, min_value=0)
+            fiber = st.number_input("Fiber", value=st.session_state.cur_meal.fiber, min_value=0)
+            
             
             if st.button("Add"):
                 add_meal(connection, st.session_state.usr_id, meal_name, calories, protein, carbs, fats, fiber)

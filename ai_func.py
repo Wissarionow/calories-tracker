@@ -53,10 +53,11 @@ def prepare_image_for_open_ai(image_path):
 #To do: 
 #-Identify user weight goals in db
 #-Pass 2nd argument 
-def fill_meal(image):
-    list = []
-    for i in range(4):
-        list[i]=openAI_response(image)
-    print(list)
+# def fill_meal(image):
+#     list = []
+#     for i in range(4):
+#         list[i]=openAI_response(image)
+#     print(list)
      
-
+def fill_meal(image):
+    return openAI_response(image)
