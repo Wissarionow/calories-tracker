@@ -24,7 +24,7 @@ def get_openai_client():
 def openAI_response(image):
     
     # env = dotenv_values(".env")
-    # openai_client = OpenAI(api_key=env["OPENAI_API_KEY"])
+    # openai_cglient = OpenAI(api_key=env["OPENAI_API_KEY"])
     instructor_openai_client = instructor.from_openai(get_openai_client())
     
     meal = instructor_openai_client.chat.completions.create(
