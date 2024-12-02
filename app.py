@@ -1,5 +1,5 @@
 import streamlit as st
-from database import return_reqest, connect_to_db, disconnect, add_meal
+from database import return_reqest, connect_to_db, disconnect, add_meal , db_user_goal
 from login_screen import login_screen
 from ai_func import fill_meal, Meal
 import tempfile
@@ -142,7 +142,7 @@ def main():
                     tmp_file_path = tmp_file.name
 
             # Pass the file path to the fill_meal function
-                st.session_state.cur_meal = fill_meal(tmp_file_path)
+                st.session_state.cur_meal = fill_meal(tmp_file_path, db_user_goal(connection, st.session_state.usr_id), connection)
             # st.write(st.session_state.cur_meal)
                 
             #manually adding meals

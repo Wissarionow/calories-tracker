@@ -54,3 +54,7 @@ def create_user(connection: Any, username: str, password: str, daily_calories: i
     cursor.execute(f"INSERT INTO users (username, password, daily_calories, daily_protein, daily_carbs, daily_fats, daily_fiber) VALUES ('{username}', '{password}', {daily_calories}, {daily_protein}, {daily_carbs}, {daily_fats}, {daily_fiber})")
     connection.commit()
     cursor.close()
+    
+def db_user_goal(connection: Any, usr_id: int):
+    goal_string = return_reqest(connection, f"SELECT goal FROM users WHERE id = {usr_id}")
+    return goal_string[0][0]
