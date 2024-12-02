@@ -4,6 +4,7 @@ import base64
 import instructor
 from pydantic import BaseModel
 from dotenv import dotenv_values
+import streamlit as st
 
 
 class Meal(BaseModel):
@@ -14,11 +15,17 @@ class Meal(BaseModel):
     fats: int
     fiber: int
 
+@st.cache_resource
+def get_openai_client():
+    env = dotenv_values(".env")
+    key=st.session_state.get("openai_api_key")
+    return OpenAI(api_key=key)
+
+
 def fill_meal(image):
     
-    env = dotenv_values(".env")
-    openai_client = OpenAI(api_key=env["OPENAI_API_KEY"])
-    instructor_openai_client = instructor.from_openai(openai_client)
+    # openai_client = OpenAI(api_key=env["OPENAI_API_KEY"])
+    instructor_openai_client = instructor.from_openai(get_openai_client())
     
     meal = instructor_openai_client.chat.completions.create(
         model="gpt-4o-mini",
