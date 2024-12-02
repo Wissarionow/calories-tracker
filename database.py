@@ -2,7 +2,7 @@ import mysql.connector
 from mysql.connector import Error
 from dotenv import dotenv_values
 from typing import Any
-
+import streamlit as st
 
 #establish connection, if None is returned, connection failed
 def connect_to_db():
