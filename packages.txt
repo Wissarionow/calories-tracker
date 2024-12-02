@@ -1,6 +1,4 @@
-tempfile
-typing
-base64
 python3
 python3-pip
-libmysqlclient-dev  # przykład, jeśli jest potrzebne do mysql
+libmariadb-dev-compat
+libmariadb-dev
