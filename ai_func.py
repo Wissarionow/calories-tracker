@@ -4,6 +4,7 @@ import base64
 import instructor
 from pydantic import BaseModel
 from dotenv import dotenv_values
+import streamlit as st
 
 
 class Meal(BaseModel):
@@ -17,7 +18,7 @@ class Meal(BaseModel):
 def openAI_response(image):
     
     env = dotenv_values(".env")
-    openai_client = OpenAI(api_key=env["OPENAI_API_KEY"])
+    openai_client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
     instructor_openai_client = instructor.from_openai(openai_client)
     
     meal = instructor_openai_client.chat.completions.create(

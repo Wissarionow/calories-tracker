@@ -9,11 +9,11 @@ def connect_to_db():
     env = dotenv_values(".env")
     try:
         connection = mysql.connector.connect(
-        host=env['DB_HOST'],        
-        user=env['DB_USER'],        
-        password=env['DB_PASS'],        
-        database=env['DB_NAME'],      
-        auth_plugin=env['DB_AUTH_PLUGIN']
+        host=st.secre['DB_HOST'],        
+        user=st.secre['DB_USER'],        
+        password=st.secre['DB_PASS'],        
+        database=st.secre['DB_NAME'],      
+        auth_plugin=st.secre['DB_AUTH_PLUGIN']
     )
         
         if connection.is_connected():
