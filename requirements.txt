@@ -1,0 +1,6 @@
+streamlit
+mysql.connector
+python-dotenv
+openai
+instructor
+pydantic
