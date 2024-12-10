@@ -1,8 +1,9 @@
 import streamlit as st
 from database import return_reqest, connect_to_db, disconnect, add_meal , db_user_goal
-from login_screen import login_screen
+from login_screen import login_screen, login_screen_g, login
 from ai_func import fill_meal, Meal
 import tempfile
+from st_paywall import add_auth  # type: ignore
 
 class CalorieAndMacroToday:
     calories: int
@@ -70,7 +71,16 @@ def main():
         st.session_state.usr_id = None
 
     if st.session_state.usr_id is None:
-        st.session_state.usr_id = login_screen()
+        # st.session_state.usr_id = login_screen()
+        st.session_state.usr_id = login()
+        # st.markdown(f'User_id_ok: {st.session_state.usr_id}') 
+        # st.markdown(f'User_email_ok: {st.session_state.email}')
+        
+    if st.session_state.usr_id is not None:
+        with st.sidebar:
+            if st.button("Logout"):
+                st.cache_data
+                st.cache_resource
 
     if st.session_state.usr_id is not None:
         connection=connect_to_db()

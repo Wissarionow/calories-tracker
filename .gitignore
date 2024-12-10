@@ -3,4 +3,7 @@ test*
 *.png
 __*
 *.ipynb
+.streamlit/
+test/
+
 
