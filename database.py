@@ -46,29 +46,58 @@ def db_login_email(connection: Any, email: str):
         st.session_state.usr_id = usr_id
         return st.session_state.usr_id
     else:
-
+        if st.session_state.email is not '' and st.session_state.usr_id is None:
+            st.markdown(f'email {st.session_state.email}')
+            st.markdown(f'usr_id {st.session_state.usr_id}')
+            
+            collect_user_data_gmail()
         return 
     #db_login_email(connection, email)
     
-def registration_email(): 
+def collect_user_data_gmail():
+    st.header("Write some data please")
+    
+    # Kontener na formularz
+    with st.form("user_data_form"):
+        # Pola do wprowadzenia danych
+        goal = st.selectbox("Goal", ["Gain", "Lose"])
+        weight = st.number_input("Weight", min_value=0)
+        bodyfat = st.number_input("Body fat", min_value=0)
+        daily_calories = st.number_input("Daily calories", min_value=0)
+        daily_protein = st.number_input("Daily protein", min_value=0)
+        daily_carbs = st.number_input("Daily carbs", min_value=0)
+  
+        # Zgoda na przetwarzanie danych
+        # consent = st.checkbox("Wyrażam zgodę na przetwarzanie moich danych")
+        
 
-            st.write("Add some info ")
-            email = st.session_state.email
-            goal = st.number_input("Gain/Lose Weight", value=st.session_state.reg.goal, min_value=0)
-            weight = st.number_input("Weight", value=st.session_state.reg.weight, min_value=0)
-            bodyfat = st.number_input("Bodyfat", value=st.session_state.reg.bodyfat, min_value=0)
-            daily_calories = st.number_input("Daily calories", value=st.session_state.reg.daily_calories, min_value=0)
-            daily_protein = st.number_input("Daily protein", value=st.session_state.reg.daily_protein, min_value=0)
-            daily_carbs = st.number_input("Daily Carbs", value=st.session_state.reg.daily_carbs, min_value=0)
+        submitted = st.form_submit_button("Save data ")
+
             
+        
+        # Walidacja i zapis danych
+        if submitted:
+            # Podstawowa walidacja
+            if not goal or not weight or not bodyfat or not daily_calories or not daily_protein or not daily_carbs:
+                st.error("Fill all data")
+                return None
             
-            if st.button("Add"):
-                connection=connect_to_db()
-                add_usr(connection, email, goal, weight, bodyfat, daily_calories, daily_protein, daily_carbs)
-                # st.session_state.usr_intake = empty_calories_today()
-                # st.session_state.usr_intake = fill_calories_today(connection, st.session_state.usr_id, 
-                #                                                   st.session_state.usr_intake)
-                st.success("User add succesfully")
+            # if not consent:
+            #     st.error("Musisz wyrazić zgodę na przetwarzanie danych")
+            #     return None
+            
+            # Przygotowanie danych do zapisu
+            user_data = {
+                "email": st.session_state.email,
+                "goal": goal,
+                "weigh": weight,
+                "bodyfat": bodyfat,
+                "daily_calories": daily_calories,
+                "daily_protein": daily_protein,
+                "daily_carbs": daily_carbs
+            }
+            st.markdown(f'co ludek wpisał{user_data}')
+            return user_data
 
 def add_meal(connection: Any, usr_id: int, meal_name: str, calories: int, protein: int, carbs: int, fats: int, fiber: int):
     cursor = connection.cursor()

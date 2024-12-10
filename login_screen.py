@@ -15,11 +15,11 @@ def login_screen():
         if st.button('Login'):
             connection = connect_to_db()
         
-            if db_login(connection, username, password):
+            if db_login(connect_to_db(), username, password):
                 st.success('Login successful')
-                st.session_state.usr_id = return_reqest(connection, f"SELECT id FROM users WHERE username = '{username}' AND password = '{password}'")[0][0]
-                disconnect(connection)
-                st.rerun()
+                st.session_state.usr_id = return_reqest(connect_to_db(), f"SELECT id FROM users WHERE username = '{username}' AND password = '{password}'")[0][0]
+                #disconnect(connection)
+                #st.rerun()
             else:
                 st.error('Incorrect password or username')
 
@@ -46,8 +46,8 @@ def login_screen_g():
             
         if db_login_email(connect_to_db(), st.session_state.email): 
             st.success("User exist!") 
-        # else: 
-        #     st.error("Użytkownik nie istnieje! Zarejestruj się, aby kontynuować.")
+        #else: 
+        
         return st.session_state.usr_id
     
 

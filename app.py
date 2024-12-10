@@ -72,7 +72,7 @@ def main():
 
     if st.session_state.usr_id is None:
         # st.session_state.usr_id = login_screen()
-        st.session_state.usr_id = login()
+       st.session_state.usr_id = login()
         # st.markdown(f'User_id_ok: {st.session_state.usr_id}') 
         # st.markdown(f'User_email_ok: {st.session_state.email}')
         
