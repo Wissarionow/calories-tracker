@@ -17,7 +17,7 @@ class Meal(BaseModel):
 
 def openAI_response(image):
     
-    env = dotenv_values(".env")
+    #env = dotenv_values(".env")
     openai_client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
     instructor_openai_client = instructor.from_openai(openai_client)
     
@@ -50,16 +50,7 @@ def prepare_image_for_open_ai(image_path):
         image_data = base64.b64encode(f.read()).decode('utf-8')
     return f"data:image/png;base64,{image_data}"
 
-#
-#To do: 
-#-Identify user weight goals in db
-#-Pass 2nd argument 
-# def fill_meal(image):
-#     list = []
-#     for i in range(4):
-#         list[i]=openAI_response(image)
-#     print(list)
-     
+
 def fill_meal(image, weight_goal, connection):
     response=[]
     for i in range(4):

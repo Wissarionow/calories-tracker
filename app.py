@@ -20,17 +20,7 @@ def empty_calories_today():
     temp.fiber=0
     return temp   
 
-#old progress bar, there was a grapical bug with it
-# def custom_progress_bar(current, goal, label):
-#     percentage = min(current / goal, 1)  # Ensure the percentage does not exceed 1
-#     color = "red" if current > goal else "green"  # Red if over the goal
-#     st.markdown(f"""
-#         <div style="border: 1px solid #ddd; border-radius: 4px; width: 100%; background-color: #f3f3f3; overflow: hidden;">
-#             <div style="width: {percentage * 100}%; background-color: {color}; padding: 5px; border-radius: 4px; text-align: center; color: white; font-weight: bold;">
-#                 {label}
-#             </div>
-#         </div>
-#     """, unsafe_allow_html=True)
+
 
 def custom_progress_bar(current, goal, label):
     goal = max(goal, 1)
@@ -48,9 +38,7 @@ def fill_calories_today(connection, usr_id,class_calories):
     
     results = return_reqest(connection, f"SELECT * FROM food_intake WHERE user_id = {usr_id} and day = CURDATE()")
     
-    #for test purposes only
-    #results = return_reqest(connection, f"SELECT * FROM food_intake WHERE user_id = {usr_id}")
-    
+
     for result in results:
         class_calories.calories+=result[2]
         class_calories.protein+=result[3]
@@ -161,6 +149,9 @@ def main():
                 st.session_state.usr_intake = fill_calories_today(connection, st.session_state.usr_id, 
                                                                   st.session_state.usr_intake)
                 st.success("Meal added successfully")
+                image = None
+                st.rerun()
+                
 
             if image is not None:
                 with open("captured_image.png", "wb") as f:

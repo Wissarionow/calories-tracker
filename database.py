@@ -6,7 +6,7 @@ import streamlit as st
 
 #establish connection, if None is returned, connection failed
 def connect_to_db():
-    env = dotenv_values(".env")
+    #env = dotenv_values(".env")
     try:
         connection = mysql.connector.connect(
         host=st.secrets['DB_HOST'],        
