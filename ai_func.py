@@ -15,6 +15,12 @@ class Meal(BaseModel):
     fats: int
     fiber: int
 
+@st.cache_resource
+def get_openai_client():
+    env = dotenv_values(".env")
+    key=st.session_state.get("openai_api_key")
+    return OpenAI(api_key=key)
+
 def openAI_response(image):
     
     #env = dotenv_values(".env")
