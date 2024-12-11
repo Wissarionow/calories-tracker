@@ -144,7 +144,8 @@ def main():
             
             
             if st.button("Add"):
-                add_meal(connection, st.session_state.usr_id, meal_name, calories, protein, carbs, fats, fiber)
+                add_meal(connection, st.session_state.usr_id, meal_name, calories, 
+                         protein, carbs, fats, fiber)
                 st.session_state.usr_intake = empty_calories_today()
                 st.session_state.usr_intake = fill_calories_today(connection, st.session_state.usr_id, 
                                                                   st.session_state.usr_intake)
