@@ -52,15 +52,13 @@ def db_login_email(connection: Any, email: str):
             st.markdown(f'usr_id {st.session_state.usr_id}')
             
             collect_user_data_gmail()
-        return 
-    #db_login_email(connection, email)
+         
+    
     
 def collect_user_data_gmail():
-    st.header("Write some data please")
-    
-    # Kontener na formularz
+    st.header("Write some data please") 
     with st.form("user_data_form"):
-        # Pola do wprowadzenia danych
+    
         goal = st.selectbox("Goal", ["lose", "gain"])
         weight = st.number_input("Weight", min_value=0)
         body_fat = st.number_input("Body fat", min_value=0)
@@ -70,15 +68,13 @@ def collect_user_data_gmail():
         daily_fats = st.number_input("Daily fats", min_value=0)
         daily_fiber = st.number_input("Daily fiber", min_value=0)
   
-        # Zgoda na przetwarzanie danych
-        # consent = st.checkbox("Wyrażam zgodę na przetwarzanie moich danych")
-        
-
+        # Consent to the processing of personal data
+        # consent = st.checkbox("I consent to the processing of my data")
         submitted = st.form_submit_button("Save data ")
 
             
         
-        # Walidacja i zapis danych
+        # Validation and save
         if submitted:
             # Podstawowa walidacja
             if not goal or not weight or not body_fat or not daily_calories or not daily_protein or not daily_carbs:
@@ -86,28 +82,14 @@ def collect_user_data_gmail():
                 return None
             
             # if not consent:
-            #     st.error("Musisz wyrazić zgodę na przetwarzanie danych")
+            #     st.error("You must consent to the processing of data")
             #     return None
             
             else:
                 add_usr(connect_to_db(), st.session_state.email, st.session_state.email, goal, weight, body_fat, daily_calories, daily_protein, daily_carbs, daily_fats, daily_fiber )
-                st.success("Success we are starting! ✅")
-                # refresh_page()
-         
+                st.success("Success, we are starting! ✅")
+                st.rerun()
 
-
-
-# Funkcja do odświeżenia strony
-def refresh_page():
-    js_code = """
-    <script>
-    function refresh() {
-        window.location.reload();
-    }
-    refresh();
-    </script>
-    """
-    components.html(js_code)
 
 def add_meal(connection: Any, usr_id: int, meal_name: str, calories: int, protein: int, carbs: int, fats: int, fiber: int):
     cursor = connection.cursor()

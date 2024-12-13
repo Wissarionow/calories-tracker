@@ -1,4 +1,4 @@
-from database import connect_to_db, db_login, return_reqest,disconnect, db_login_email
+from database import connect_to_db, db_login, return_reqest, db_login_email
 import streamlit as st
 from st_paywall import add_auth  # type: ignore
 

@@ -1,9 +1,9 @@
 import streamlit as st
-from database import return_reqest, connect_to_db, disconnect, add_meal , db_user_goal, refresh_page
-from login_screen import login_screen, login_screen_g, login
+from database import return_reqest, connect_to_db, add_meal , db_user_goal
+from login_screen import login
 from ai_func import fill_meal, Meal
 import tempfile
-from st_paywall import add_auth  # type: ignore
+
 
 class CalorieAndMacroToday:
     calories: int
@@ -21,17 +21,7 @@ def empty_calories_today():
     temp.fiber=0
     return temp   
 
-#old progress bar, there was a grapical bug with it
-# def custom_progress_bar(current, goal, label):
-#     percentage = min(current / goal, 1)  # Ensure the percentage does not exceed 1
-#     color = "red" if current > goal else "green"  # Red if over the goal
-#     st.markdown(f"""
-#         <div style="border: 1px solid #ddd; border-radius: 4px; width: 100%; background-color: #f3f3f3; overflow: hidden;">
-#             <div style="width: {percentage * 100}%; background-color: {color}; padding: 5px; border-radius: 4px; text-align: center; color: white; font-weight: bold;">
-#                 {label}
-#             </div>
-#         </div>
-#     """, unsafe_allow_html=True)
+
 
 def custom_progress_bar(current, goal, label):
     goal = max(goal, 1)
@@ -49,8 +39,7 @@ def fill_calories_today(connection, usr_id,class_calories):
     
     results = return_reqest(connection, f"SELECT * FROM food_intake WHERE user_id = {usr_id} and day = CURDATE()")
     
-    #for test purposes only
-    #results = return_reqest(connection, f"SELECT * FROM food_intake WHERE user_id = {usr_id}")
+
     
     for result in results:
         class_calories.calories+=result[2]
@@ -81,7 +70,7 @@ def main():
             if st.button("Logout"):
                 st.cache_data
                 st.cache_resource
-                refresh_page()
+                st.rerun
 
 
     if st.session_state.usr_id is not None:
@@ -96,34 +85,13 @@ def main():
             fats=0,
             fiber=0
         )
-    #logo input main page - not working!!!   
-    # st.markdown(
-    #     """
-    #     <style>
-    #     .logo-container {
-    #         display: flex;
-    #         justify-content: left;  /* Centrowanie poziome */
-    #         align-items: center;  /* Centrowanie pionowe */
-    #         height: 150px;  /* Opcjonalna wysokość kontenera */
-    #     }
-    #     .logo {
-    #         width: 250px;  /* Szerokość obrazka */
-    #         height: auto;  /* Automatyczna wysokość zachowująca proporcje */
-    #     }
-    #     </style>
-    #     <div class="logo-container">
-    #         <img src="calories-tracker-logo.png" class="logo">
-    #     </div>
-    #     """, 
-    #     unsafe_allow_html=True
-    # )
-     
+
 
 
     # calories progress bars
     if st.session_state.usr_id is not None:
         username = return_reqest(connection, f"SELECT username FROM users WHERE id = {st.session_state.usr_id}")
-        st.title(f"Welcome, {username[0][0]}")
+        st.markdown(f"### Welcome, {username[0][0]}")
         st.write("Here is your calories and macro for today")
         
         results = return_reqest(connection, f"SELECT daily_calories, daily_protein, daily_carbs, daily_fats, daily_fiber FROM users WHERE id = {st.session_state.usr_id}")
