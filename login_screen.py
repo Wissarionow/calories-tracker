@@ -9,7 +9,7 @@ def login():
 
 def login_screen():
     with st.sidebar: 
-        st.markdown('### Please login by username')
+        st.markdown('### or please login by username')
         username = st.text_input('Username')
         password = st.text_input('Password', type='password')
         if st.button('Login'):
@@ -35,17 +35,21 @@ def login_screen_g():
             required=False,
             login_sidebar=True,
             login_button_text="Log by Google",
+            
 
             )
+      
         
         except KeyError:
             pass
+
         
         if st.session_state.get('email'):
             st.markdown(f"You logged by: {st.session_state['email']}")
             
         if db_login_email(connect_to_db(), st.session_state.email): 
             st.success("User exist!") 
+            st.experimental_set_query_params(logged_in=True)
         #else: 
         
         return st.session_state.usr_id

@@ -1,5 +1,5 @@
 import streamlit as st
-from database import return_reqest, connect_to_db, disconnect, add_meal , db_user_goal
+from database import return_reqest, connect_to_db, disconnect, add_meal , db_user_goal, refresh_page
 from login_screen import login_screen, login_screen_g, login
 from ai_func import fill_meal, Meal
 import tempfile
@@ -81,6 +81,8 @@ def main():
             if st.button("Logout"):
                 st.cache_data
                 st.cache_resource
+                refresh_page()
+
 
     if st.session_state.usr_id is not None:
         connection=connect_to_db()
@@ -94,8 +96,30 @@ def main():
             fats=0,
             fiber=0
         )
-        
-        
+    #logo input main page - not working!!!   
+    # st.markdown(
+    #     """
+    #     <style>
+    #     .logo-container {
+    #         display: flex;
+    #         justify-content: left;  /* Centrowanie poziome */
+    #         align-items: center;  /* Centrowanie pionowe */
+    #         height: 150px;  /* Opcjonalna wysokość kontenera */
+    #     }
+    #     .logo {
+    #         width: 250px;  /* Szerokość obrazka */
+    #         height: auto;  /* Automatyczna wysokość zachowująca proporcje */
+    #     }
+    #     </style>
+    #     <div class="logo-container">
+    #         <img src="calories-tracker-logo.png" class="logo">
+    #     </div>
+    #     """, 
+    #     unsafe_allow_html=True
+    # )
+     
+
+
     # calories progress bars
     if st.session_state.usr_id is not None:
         username = return_reqest(connection, f"SELECT username FROM users WHERE id = {st.session_state.usr_id}")

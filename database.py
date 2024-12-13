@@ -3,6 +3,7 @@ from mysql.connector import Error
 from dotenv import dotenv_values
 from typing import Any
 import streamlit as st
+import streamlit.components.v1 as components
 
 #establish connection, if None is returned, connection failed
 @st.cache_resource
@@ -60,12 +61,14 @@ def collect_user_data_gmail():
     # Kontener na formularz
     with st.form("user_data_form"):
         # Pola do wprowadzenia danych
-        goal = st.selectbox("Goal", ["Gain", "Lose"])
+        goal = st.selectbox("Goal", ["lose", "gain"])
         weight = st.number_input("Weight", min_value=0)
-        bodyfat = st.number_input("Body fat", min_value=0)
+        body_fat = st.number_input("Body fat", min_value=0)
         daily_calories = st.number_input("Daily calories", min_value=0)
         daily_protein = st.number_input("Daily protein", min_value=0)
         daily_carbs = st.number_input("Daily carbs", min_value=0)
+        daily_fats = st.number_input("Daily fats", min_value=0)
+        daily_fiber = st.number_input("Daily fiber", min_value=0)
   
         # Zgoda na przetwarzanie danych
         # consent = st.checkbox("Wyrażam zgodę na przetwarzanie moich danych")
@@ -78,7 +81,7 @@ def collect_user_data_gmail():
         # Walidacja i zapis danych
         if submitted:
             # Podstawowa walidacja
-            if not goal or not weight or not bodyfat or not daily_calories or not daily_protein or not daily_carbs:
+            if not goal or not weight or not body_fat or not daily_calories or not daily_protein or not daily_carbs:
                 st.error("Fill all data")
                 return None
             
@@ -86,18 +89,25 @@ def collect_user_data_gmail():
             #     st.error("Musisz wyrazić zgodę na przetwarzanie danych")
             #     return None
             
-            # Przygotowanie danych do zapisu
-            user_data = {
-                "email": st.session_state.email,
-                "goal": goal,
-                "weigh": weight,
-                "bodyfat": bodyfat,
-                "daily_calories": daily_calories,
-                "daily_protein": daily_protein,
-                "daily_carbs": daily_carbs
-            }
-            st.markdown(f'co ludek wpisał{user_data}')
-            return user_data
+            else:
+                add_usr(connect_to_db(), st.session_state.email, st.session_state.email, goal, weight, body_fat, daily_calories, daily_protein, daily_carbs, daily_fats, daily_fiber )
+                st.success("Success we are starting! ✅")
+                # refresh_page()
+         
+
+
+
+# Funkcja do odświeżenia strony
+def refresh_page():
+    js_code = """
+    <script>
+    function refresh() {
+        window.location.reload();
+    }
+    refresh();
+    </script>
+    """
+    components.html(js_code)
 
 def add_meal(connection: Any, usr_id: int, meal_name: str, calories: int, protein: int, carbs: int, fats: int, fiber: int):
     cursor = connection.cursor()
@@ -105,9 +115,9 @@ def add_meal(connection: Any, usr_id: int, meal_name: str, calories: int, protei
     connection.commit()
     cursor.close()
 
-def add_usr(connection: Any, email: int, goal: str, weight: int, body_fat: int, daily_calories: int, daily_protein: int, daily_carbs: int,):
+def add_usr(connection: Any, email: str, username: str, goal: str, weight: int, body_fat: int, daily_calories: int, daily_protein: int, daily_carbs: int, daily_fats: int, daily_fiber: int):
     cursor = connection.cursor()
-    cursor.execute(f"INSERT INTO users (email, goal, body_fat, weight, daily_calories, daily_protein, daily_carbs) VALUES ({email}, '{goal}', '{body_fat}', '{weight}', '{daily_calories}', '{daily_protein}', '{daily_carbs}')")
+    cursor.execute(f"INSERT INTO users (email, username, goal, bodyfat, weight, daily_calories, daily_protein, daily_carbs, daily_fats, daily_fiber) VALUES ('{email}', '{username}', '{goal}', '{body_fat}', '{weight}', '{daily_calories}', '{daily_protein}', '{daily_carbs}', '{daily_fats}', '{daily_fiber}')")
     connection.commit()
     cursor.close()
     
@@ -115,7 +125,7 @@ def add_usr(connection: Any, email: int, goal: str, weight: int, body_fat: int, 
 #void disconnect 
 def disconnect(connection:any):
     connection.close()
-    
+   
 def create_user(connection: Any, username: str, password: str, daily_calories: int, daily_protein: int, daily_carbs: int, daily_fats: int, daily_fiber: int):
     cursor = connection.cursor()
     cursor.execute(f"INSERT INTO users (username, password, daily_calories, daily_protein, daily_carbs, daily_fats, daily_fiber) VALUES ('{username}', '{password}', {daily_calories}, {daily_weight}, {daily_carbs}, {daily_fats}, {daily_fiber})")
