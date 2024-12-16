@@ -39,8 +39,6 @@ def fill_calories_today(connection, usr_id,class_calories):
     
     results = return_reqest(connection, f"SELECT * FROM food_intake WHERE user_id = {usr_id} and day = CURDATE()")
     
-
-    
     for result in results:
         class_calories.calories+=result[2]
         class_calories.protein+=result[3]
@@ -158,11 +156,15 @@ def main():
             
             
             if st.button("Add"):
-                add_meal(connection, st.session_state.usr_id, meal_name, calories, protein, carbs, fats, fiber)
+                add_meal(connection, st.session_state.usr_id, meal_name, calories, 
+                         protein, carbs, fats, fiber)
                 st.session_state.usr_intake = empty_calories_today()
                 st.session_state.usr_intake = fill_calories_today(connection, st.session_state.usr_id, 
                                                                   st.session_state.usr_intake)
                 st.success("Meal added successfully")
+                image = None
+                st.rerun()
+                
 
             if image is not None:
                 with open("captured_image.png", "wb") as f:

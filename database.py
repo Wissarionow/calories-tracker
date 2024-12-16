@@ -8,7 +8,7 @@ import streamlit.components.v1 as components
 #establish connection, if None is returned, connection failed
 @st.cache_resource
 def connect_to_db():
-    env = dotenv_values(".env")
+    #env = dotenv_values(".env")
     try:
         connection = mysql.connector.connect(
         host=st.secrets['DB_HOST'],        
