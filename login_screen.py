@@ -49,7 +49,7 @@ def login_screen_g():
             
         if db_login_email(connect_to_db(), st.session_state.email): 
             st.success("User exist!") 
-            st.experimental_set_query_params(logged_in=True)
+            st.query_params.update(logged_in=True)
         #else: 
         
         return st.session_state.usr_id
