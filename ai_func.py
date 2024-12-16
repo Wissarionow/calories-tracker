@@ -23,7 +23,7 @@ def get_openai_client():
 
 def openAI_response(image):
     
-    #env = dotenv_values(".env")
+
     openai_client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
     instructor_openai_client = instructor.from_openai(openai_client)
     

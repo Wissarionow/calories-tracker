@@ -1,8 +1,9 @@
 import streamlit as st
-from database import return_reqest, connect_to_db, disconnect, add_meal , db_user_goal
-from login_screen import login_screen
+from database import return_reqest, connect_to_db, add_meal , db_user_goal
+from login_screen import login
 from ai_func import fill_meal, Meal
 import tempfile
+
 
 class CalorieAndMacroToday:
     calories: int
@@ -38,7 +39,6 @@ def fill_calories_today(connection, usr_id,class_calories):
     
     results = return_reqest(connection, f"SELECT * FROM food_intake WHERE user_id = {usr_id} and day = CURDATE()")
     
-
     for result in results:
         class_calories.calories+=result[2]
         class_calories.protein+=result[3]
@@ -58,7 +58,9 @@ def main():
         st.session_state.usr_id = None
 
     if st.session_state.usr_id is None:
-        st.session_state.usr_id = login_screen()
+       st.session_state.usr_id = login()
+
+
 
     if st.session_state.usr_id is not None:
         connection=connect_to_db()
@@ -72,12 +74,13 @@ def main():
             fats=0,
             fiber=0
         )
-        
-        
+
+
+
     # calories progress bars
     if st.session_state.usr_id is not None:
         username = return_reqest(connection, f"SELECT username FROM users WHERE id = {st.session_state.usr_id}")
-        st.title(f"Welcome, {username[0][0]}")
+        st.markdown(f"### Welcome, {username[0][0]}")
         st.write("Here is your calories and macro for today")
         
         results = return_reqest(connection, f"SELECT daily_calories, daily_protein, daily_carbs, daily_fats, daily_fiber FROM users WHERE id = {st.session_state.usr_id}")
@@ -121,7 +124,7 @@ def main():
                 image = st.camera_input("Take a picture")
 
             if image is not None:
-                st.image(image, use_column_width=True)
+                st.image(image, use_container_width=True)
 
 
             # Save the uploaded file to a temporary location
@@ -131,7 +134,7 @@ def main():
 
             # Pass the file path to the fill_meal function
                 st.session_state.cur_meal = fill_meal(tmp_file_path, db_user_goal(connection, st.session_state.usr_id), connection)
-            # st.write(st.session_state.cur_meal)
+            
                 
             #manually adding meals
             st.write("Add a meal")
@@ -150,7 +153,15 @@ def main():
                 st.session_state.usr_intake = fill_calories_today(connection, st.session_state.usr_id, 
                                                                   st.session_state.usr_intake)
                 st.success("Meal added successfully")
-                image = None
+                st.session_state.cur_meal = Meal(
+                    name="Add your meal",
+                    calories=0,
+                    protein=0,
+                    carbs=0,
+                    fats=0,
+                    fiber=0
+                )
+                
                 st.rerun()
                 
 
