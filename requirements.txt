@@ -4,3 +4,4 @@ python-dotenv
 openai
 instructor
 pydantic
+st-paywall
