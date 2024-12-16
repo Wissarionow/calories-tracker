@@ -161,7 +161,7 @@ def main():
                     fats=0,
                     fiber=0
                 )
-                
+                image = None
                 st.rerun()
                 
 
