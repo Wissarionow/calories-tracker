@@ -68,8 +68,6 @@ def collect_user_data_gmail():
         daily_fats = st.number_input("Daily fats", min_value=0)
         daily_fiber = st.number_input("Daily fiber", min_value=0)
   
-        # Consent to the processing of personal data
-        # consent = st.checkbox("I consent to the processing of my data")
         submitted = st.form_submit_button("Save data ")
 
             
@@ -80,10 +78,6 @@ def collect_user_data_gmail():
             if not goal or not weight or not body_fat or not daily_calories or not daily_protein or not daily_carbs:
                 st.error("Fill all data")
                 return None
-            
-            # if not consent:
-            #     st.error("You must consent to the processing of data")
-            #     return None
             
             else:
                 add_usr(connect_to_db(), st.session_state.email, st.session_state.email, goal, weight, body_fat, daily_calories, daily_protein, daily_carbs, daily_fats, daily_fiber )
@@ -110,7 +104,7 @@ def disconnect(connection:any):
    
 def create_user(connection: Any, username: str, password: str, daily_calories: int, daily_protein: int, daily_carbs: int, daily_fats: int, daily_fiber: int):
     cursor = connection.cursor()
-    cursor.execute(f"INSERT INTO users (username, password, daily_calories, daily_protein, daily_carbs, daily_fats, daily_fiber) VALUES ('{username}', '{password}', {daily_calories}, {daily_weight}, {daily_carbs}, {daily_fats}, {daily_fiber})")
+    cursor.execute(f"INSERT INTO users (username, password, daily_calories, daily_protein, daily_carbs, daily_fats, daily_fiber) VALUES ('{username}', '{password}', {daily_calories}, {daily_protein}, {daily_carbs}, {daily_fats}, {daily_fiber})")
     connection.commit()
     cursor.close()
     

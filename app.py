@@ -58,17 +58,8 @@ def main():
         st.session_state.usr_id = None
 
     if st.session_state.usr_id is None:
-        # st.session_state.usr_id = login_screen()
        st.session_state.usr_id = login()
-        # st.markdown(f'User_id_ok: {st.session_state.usr_id}') 
-        # st.markdown(f'User_email_ok: {st.session_state.email}')
-        
-    if st.session_state.usr_id is not None:
-        with st.sidebar:
-            if st.button("Logout"):
-                st.cache_data
-                st.cache_resource
-                st.rerun
+
 
 
     if st.session_state.usr_id is not None:
@@ -133,7 +124,7 @@ def main():
                 image = st.camera_input("Take a picture")
 
             if image is not None:
-                st.image(image, use_column_width=True)
+                st.image(image, use_container_width=True)
 
 
             # Save the uploaded file to a temporary location
@@ -143,7 +134,7 @@ def main():
 
             # Pass the file path to the fill_meal function
                 st.session_state.cur_meal = fill_meal(tmp_file_path, db_user_goal(connection, st.session_state.usr_id), connection)
-            # st.write(st.session_state.cur_meal)
+            
                 
             #manually adding meals
             st.write("Add a meal")
@@ -162,7 +153,15 @@ def main():
                 st.session_state.usr_intake = fill_calories_today(connection, st.session_state.usr_id, 
                                                                   st.session_state.usr_intake)
                 st.success("Meal added successfully")
-                image = None
+                st.session_state.cur_meal = Meal(
+                    name="Add your meal",
+                    calories=0,
+                    protein=0,
+                    carbs=0,
+                    fats=0,
+                    fiber=0
+                )
+                
                 st.rerun()
                 
 

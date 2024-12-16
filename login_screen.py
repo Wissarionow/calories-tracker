@@ -4,7 +4,7 @@ from st_paywall import add_auth  # type: ignore
 
 def login():
     login_screen_g()
-    login_screen()
+    #login_screen()
     return st.session_state.usr_id
 
 def login_screen():
@@ -18,8 +18,6 @@ def login_screen():
             if db_login(connect_to_db(), username, password):
                 st.success('Login successful')
                 st.session_state.usr_id = return_reqest(connect_to_db(), f"SELECT id FROM users WHERE username = '{username}' AND password = '{password}'")[0][0]
-                #disconnect(connection)
-                #st.rerun()
             else:
                 st.error('Incorrect password or username')
 
@@ -55,17 +53,4 @@ def login_screen_g():
         return st.session_state.usr_id
     
 
-    # if 'usr_id' not in st.session_state:
-    #     st.session_state.usr_id = None
-
-    # if st.session_state.usr_id is None:
-    #     st.session_state.usr_id = login_screen()
-
-# def register_screen():
-#
-#     st.title('Please register')
-#     username = st.text_input('Username')
-#     password = st.text_input('Password', type='password')
-#     weight = st.number_input('How much do you weight?', min_value=0)
-#     height = st.number_input('How tall are you?', min_value=0)
     
