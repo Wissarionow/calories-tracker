@@ -24,7 +24,8 @@ def login_screen():
         return st.session_state.usr_id
 
 def login_screen_g():
-     
+     # Domyślnie rozwinięty sidebar
+    st.sidebar.checkbox('Menu', value=True)
     with st.sidebar: 
         st.markdown('### Login by Google')
     
