@@ -14,7 +14,8 @@ def connect_to_db():
         host=st.secrets['DB_HOST'],        
         user=st.secrets['DB_USER'],        
         password=st.secrets['DB_PASS'],        
-        database=st.secrets['DB_NAME'],      
+        database=st.secrets['DB_NAME'],
+        port=st.secrets['DB_PORT'],      
         auth_plugin=st.secrets['DB_AUTH_PLUGIN']
     )
         
@@ -47,7 +48,7 @@ def db_login_email(connection: Any, email: str):
         st.session_state.usr_id = usr_id
         return st.session_state.usr_id
     else:
-        if st.session_state.email is not '' and st.session_state.usr_id is None:
+        if st.session_state.email != '' and st.session_state.usr_id is None:
             st.markdown(f'email {st.session_state.email}')
             st.markdown(f'usr_id {st.session_state.usr_id}')
             
