@@ -56,7 +56,7 @@ def db_login_email(connection: Any, email: str):
     
     
 def collect_user_data_gmail():
-    st.header("Write some data please") 
+    st.header("Please fill your data") 
     with st.form("user_data_form"):
     
         goal = st.selectbox("Goal", ["lose", "gain"])
@@ -68,10 +68,8 @@ def collect_user_data_gmail():
         daily_fats = st.number_input("Daily fats", min_value=0)
         daily_fiber = st.number_input("Daily fiber", min_value=0)
   
-        submitted = st.form_submit_button("Save data ")
+        submitted = st.form_submit_button("Save data")
 
-            
-        
         # Validation and save
         if submitted:
             # Podstawowa walidacja
@@ -80,9 +78,11 @@ def collect_user_data_gmail():
                 return None
             
             else:
-                add_usr(connect_to_db(), st.session_state.email, st.session_state.email, goal, weight, body_fat, daily_calories, daily_protein, daily_carbs, daily_fats, daily_fiber )
+                connection=connect_to_db()
+                add_usr(connection, st.session_state.email, st.session_state.email, goal, weight, body_fat, daily_calories, daily_protein, daily_carbs, daily_fats, daily_fiber )
                 st.success("Success, we are starting! ✅")
                 st.rerun()
+                disconnect(connection)
 
 
 def add_meal(connection: Any, usr_id: int, meal_name: str, calories: int, protein: int, carbs: int, fats: int, fiber: int):

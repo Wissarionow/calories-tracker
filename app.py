@@ -22,7 +22,6 @@ def empty_calories_today():
     return temp   
 
 
-
 def custom_progress_bar(current, goal, label):
     goal = max(goal, 1)
     percentage = min(current / goal, 1)  # Cap percentage at 1 (100%)
@@ -60,10 +59,9 @@ def main():
     if st.session_state.usr_id is None:
        st.session_state.usr_id = login()
 
-
-
     if st.session_state.usr_id is not None:
         connection=connect_to_db()
+    
         
     if 'cur_meal' not in st.session_state:
         st.session_state.cur_meal = Meal(
@@ -79,6 +77,7 @@ def main():
 
     # calories progress bars
     if st.session_state.usr_id is not None:
+        
         username = return_reqest(connection, f"SELECT username FROM users WHERE id = {st.session_state.usr_id}")
         st.markdown(f"### Welcome, {username[0][0]}")
         st.write("Here is your calories and macro for today")
@@ -88,8 +87,8 @@ def main():
         
         st.session_state.usr_intake=empty_calories_today()
         st.session_state.usr_intake = fill_calories_today(connection, st.session_state.usr_id, st.session_state.usr_intake)
-        
-        
+
+            
         col1, col2 = st.columns(2)
         
         with col1:
