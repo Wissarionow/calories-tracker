@@ -14,8 +14,7 @@ def connect_to_db():
         host=st.secrets['DB_HOST'],        
         user=st.secrets['DB_USER'],        
         password=st.secrets['DB_PASS'],        
-        database=st.secrets['DB_NAME'],
-        port=st.secrets['DB_PORT'],      
+        database=st.secrets['DB_NAME'],   
         auth_plugin=st.secrets['DB_AUTH_PLUGIN']
     )
         

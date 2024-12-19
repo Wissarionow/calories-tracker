@@ -3,7 +3,6 @@ from openai import OpenAI
 import base64
 import instructor
 from pydantic import BaseModel
-from dotenv import dotenv_values
 import streamlit as st
 
 
@@ -17,7 +16,6 @@ class Meal(BaseModel):
 
 @st.cache_resource
 def get_openai_client():
-    env = dotenv_values(".env")
     key=st.session_state.get("openai_api_key")
     return OpenAI(api_key=key)
 
