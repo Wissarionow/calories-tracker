@@ -1,4 +1,3 @@
-
 from openai import OpenAI
 import base64
 import instructor
@@ -55,30 +54,9 @@ def prepare_image_for_open_ai(image_path):
     return f"data:image/png;base64,{image_data}"
 
 
-def fill_meal(image, weight_goal, connection):
-    response=[]
-    for i in range(4):
-        response.append(openAI_response(image))
-    #if goal is to lose weigh remove highest calorie response
-    if weight_goal == "lose":
-        response = sorted(response, key=lambda x: x.calories)
-        response.pop()
-    #if goal is to gain weight remove lowest calorie response
-    elif weight_goal == "gain":
-        response = sorted(response, key=lambda x: x.calories, reverse=True)
-        response.pop()
-    #if goal is to maintain weight remove highest and lowest calorie response
-    else:
-        response = sorted(response, key=lambda x: x.calories)
-        response.pop()
-        response.pop()
-    #return mean of remaining responses
-    return Meal(
-        name=response[0].name,
-        calories=sum([meal.calories for meal in response]) // len(response),
-        protein=sum([meal.protein for meal in response]) // len(response),
-        carbs=sum([meal.carbs for meal in response]) // len(response),
-        fats=sum([meal.fats for meal in response]) // len(response),
-        fiber=sum([meal.fiber for meal in response]) // len(response),
-    )
+def fill_meal(image,):
+    
+    response = openAI_response(image)
+   
+    return response
     

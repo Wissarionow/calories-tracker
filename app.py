@@ -120,13 +120,15 @@ def main():
        
         with col2:
             # adding meals from photo
-            option = st.selectbox("Choose an option", ("Upload a photo", "Take a picture from camera"))
+            option = st.selectbox("Choose an option", ("Take a picture from camera","Upload a photo"))
             image = None
             
-            if option == "Upload a photo":
-                image = st.file_uploader("Upload a photo", type=["png", "jpg", "jpeg"])
-            elif option == "Take a picture from camera":
+            
+            if option == "Take a picture from camera":
                 image = st.camera_input("Take a picture")
+            elif option == "Upload a photo":
+                image = st.file_uploader("Upload a photo", type=["png", "jpg", "jpeg"])
+            
 
             if image is not None:
                 st.image(image, use_container_width=True)
@@ -138,7 +140,7 @@ def main():
                     tmp_file_path = tmp_file.name
 
             # Pass the file path to the fill_meal function
-                st.session_state.cur_meal = fill_meal(tmp_file_path, db_user_goal(connection, st.session_state.usr_id), connection)
+                st.session_state.cur_meal = fill_meal(tmp_file_path, db_user_goal(connection, st.session_state.usr_id))
             
                 
             #manually adding meals
