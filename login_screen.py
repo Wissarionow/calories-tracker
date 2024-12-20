@@ -4,7 +4,7 @@ from st_paywall import add_auth  # type: ignore
 
 def login():
     login_screen_g()
-    #login_screen()
+    login_screen()
     return st.session_state.usr_id
 
 def login_screen():
@@ -34,8 +34,6 @@ def login_screen_g():
             required=False,
             login_sidebar=True,
             login_button_text="Log by Google",
-            
-
             )
       
         
