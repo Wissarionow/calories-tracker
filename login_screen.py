@@ -4,7 +4,7 @@ from st_paywall import add_auth  # type: ignore
 
 def login():
     login_screen_g()
-    login_screen()
+    #login_screen()
     return st.session_state.usr_id
 
 def login_screen():
@@ -17,10 +17,12 @@ def login_screen():
         
             if db_login(connection, username, password):
                 st.success('Login successful')
-                st.session_state.usr_id = return_reqest(connection, f"SELECT id FROM users WHERE username = '{username}' AND password = '{password}'")[0][0]
+                temp = return_reqest(connection, f"SELECT id FROM users WHERE username = '{username}' AND password = '{password}'")[0][0]
             else:
                 st.error('Incorrect password or username')
+                
             disconnect(connection)
+            st.session_state.usr_id = temp
         return st.session_state.usr_id
 
 def login_screen_g():
@@ -43,6 +45,7 @@ def login_screen_g():
         
         if st.session_state.get('email'):
             st.markdown(f"You logged by: {st.session_state['email']}")
+            
         connection=connect_to_db()
         if db_login_email(connection, st.session_state.email): 
             st.success("User exist!") 

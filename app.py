@@ -48,6 +48,7 @@ def fill_calories_today(connection, usr_id,class_calories):
 
 
 def main():
+    
     st.set_page_config(page_title="Calories Tracker")
     #general session state variables
     if 'usr_intake' not in st.session_state:
@@ -79,6 +80,10 @@ def main():
     if st.session_state.usr_id is not None:
         
         connection = connect_to_db()
+        
+        print("TO SIE NIE DZIEJE PRZED ZALOGOWANIEM")
+        print(st.session_state.usr_id)
+        
         username = return_reqest(connection, f"SELECT username FROM users WHERE id = {st.session_state.usr_id}")
         st.markdown(f"### Welcome, {username[0][0]}")
         st.write("Here is your calories and macro for today")

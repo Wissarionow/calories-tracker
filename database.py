@@ -1,14 +1,14 @@
 import mysql.connector
 from mysql.connector import Error
-from dotenv import dotenv_values
 from typing import Any
 import streamlit as st
 import streamlit.components.v1 as components
 
 #establish connection, if None is returned, connection failed
-@st.cache_resource
+
 def connect_to_db():
     #env = dotenv_values(".env")
+    print("CONNECTTION")
     try:
         connection = mysql.connector.connect(
         host=st.secrets['DB_HOST'],        
@@ -19,6 +19,7 @@ def connect_to_db():
     )
         
         if connection.is_connected():
+            print("CONNECTED")
             return connection
         
     except Error as e:
@@ -26,7 +27,7 @@ def connect_to_db():
         return None
 
 def return_reqest(connection: Any,query: str):
-    cursor = connection.cursor()
+    cursor = connection.cursor(buffered=True)
     cursor.execute(query)
     results = cursor.fetchall()
     cursor.close()
@@ -100,6 +101,7 @@ def add_usr(connection: Any, email: str, username: str, goal: str, weight: int, 
     
 #void disconnect 
 def disconnect(connection:any):
+    print("DISCONNECTED")
     connection.close()
    
 def create_user(connection: Any, username: str, password: str, daily_calories: int, daily_protein: int, daily_carbs: int, daily_fats: int, daily_fiber: int):
