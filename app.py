@@ -1,5 +1,5 @@
 import streamlit as st
-from database import return_reqest, connect_to_db, add_meal , db_user_goal
+from database import return_reqest, connect_to_db, add_meal , db_user_goal, test_mysql_connection
 from login_screen import login
 from ai_func import fill_meal, Meal
 import tempfile
@@ -49,6 +49,7 @@ def fill_calories_today(connection, usr_id,class_calories):
 
 def main():
     st.set_page_config(page_title="Calories Tracker")
+    test_mysql_connection()
     #general session state variables
     if 'usr_intake' not in st.session_state:
         st.session_state.usr_intake = empty_calories_today()

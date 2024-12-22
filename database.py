@@ -6,7 +6,32 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 #establish connection, if None is returned, connection failed
-@st.cache_resource
+import streamlit as st
+import mysql.connector
+from mysql.connector import Error
+
+
+
+def test_mysql_connection():
+    try:
+        # Inicjalizacja połączenia za pomocą sekretów
+        connection = mysql.connector.connect(
+            host=st.secrets["DB_HOST"],
+            user=st.secrets["DB_USER"],
+            password=st.secrets["DB_PASS"],
+            database=st.secrets["DB_NAME"]
+        )
+        if connection.is_connected():
+            st.write("Connection OK")
+            return True
+    except Error as e:
+        st.write(f"Connection NOK: {e}")
+        return False
+    finally:
+        if 'connection' in locals() and connection.is_connected():
+            connection.close()
+
+
 def connect_to_db():
     #env = dotenv_values(".env")
     try:
