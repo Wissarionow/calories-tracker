@@ -4,6 +4,7 @@ from login_screen import login
 from ai_func import fill_meal, Meal
 import tempfile
 
+st.set_page_config(initial_sidebar_state="expanded", page_title="Calories Tracker")
 
 class CalorieAndMacroToday:
     calories: int
@@ -48,8 +49,7 @@ def fill_calories_today(connection, usr_id,class_calories):
 
 
 def main():
-    
-    st.set_page_config(page_title="Calories Tracker")
+
     #general session state variables
     if 'usr_intake' not in st.session_state:
         st.session_state.usr_intake = empty_calories_today()
@@ -59,10 +59,9 @@ def main():
 
     if st.session_state.usr_id is None:
        st.session_state.usr_id = login()
-       #st.session_state.usr_id = 1
 
-   
-    
+    if st.session_state.usr_id is not None:
+        connection=connect_to_db()
         
     if 'cur_meal' not in st.session_state:
         st.session_state.cur_meal = Meal(
@@ -76,28 +75,28 @@ def main():
 
 
 
-    # calories progress bars
+    # welcome to log user
     if st.session_state.usr_id is not None:
-        
-        connection = connect_to_db()
-        
-        print("TO SIE NIE DZIEJE PRZED ZALOGOWANIEM")
-        print(st.session_state.usr_id)
-        
+        connection=connect_to_db()  
         username = return_reqest(connection, f"SELECT username FROM users WHERE id = {st.session_state.usr_id}")
         st.markdown(f"### Welcome, {username[0][0]}")
-        st.write("Here is your calories and macro for today")
-        
-        results = return_reqest(connection, f"SELECT daily_calories, daily_protein, daily_carbs, daily_fats, daily_fiber FROM users WHERE id = {st.session_state.usr_id}")
-        daily_goals = results[0]
-        
-        st.session_state.usr_intake=empty_calories_today()
-        st.session_state.usr_intake = fill_calories_today(connection, st.session_state.usr_id, st.session_state.usr_intake)
 
-            
-        col1, col2 = st.columns(2)
+        Meals, Today=st.tabs(["Add meal", "Today data"])
+     
+        with Today:
+            # calories progress bars
+            # if st.session_state.usr_id is not None:
+            # username = return_reqest(connection, f"SELECT username FROM users WHERE id = {st.session_state.usr_id}")
+            # st.markdown(f"### Welcome, {username[0][0]}")
+            st.write("Here is your calories and macro for today")
         
-        with col1:
+            results = return_reqest(connection, f"SELECT daily_calories, daily_protein, daily_carbs, daily_fats, daily_fiber FROM users WHERE id = {st.session_state.usr_id}")
+            daily_goals = results[0]
+        
+            st.session_state.usr_intake=empty_calories_today()
+            st.session_state.usr_intake = fill_calories_today(connection, st.session_state.usr_id, st.session_state.usr_intake)  
+        
+        
             st.write("Calories Intake")
             custom_progress_bar(st.session_state.usr_intake.calories, daily_goals[0], 
                                 f"{st.session_state.usr_intake.calories} / {int(daily_goals[0])} kcal")
@@ -118,17 +117,17 @@ def main():
             custom_progress_bar(st.session_state.usr_intake.fiber, daily_goals[4], 
                                 f"{st.session_state.usr_intake.fiber} / {int(daily_goals[4])} g")
        
-        with col2:
+        with Meals:
+        # if st.session_state.usr_id is not None:
             # adding meals from photo
-            option = st.selectbox("Choose an option", ("Take a picture from camera","Upload a photo"))
+            option = st.selectbox("Choose an option", ("Take a picture from camera", "Upload a photo" ))
             image = None
             
-            
+
             if option == "Take a picture from camera":
                 image = st.camera_input("Take a picture")
             elif option == "Upload a photo":
                 image = st.file_uploader("Upload a photo", type=["png", "jpg", "jpeg"])
-            
 
             if image is not None:
                 st.image(image, use_container_width=True)

@@ -2,9 +2,10 @@ from database import connect_to_db, db_login, return_reqest, db_login_email, dis
 import streamlit as st
 from st_paywall import add_auth  # type: ignore
 
+
 def login():
     login_screen_g()
-    login_screen()
+    # login_screen()
     return st.session_state.usr_id
 
 def login_screen():
@@ -24,12 +25,8 @@ def login_screen():
             disconnect(connection)
             st.session_state.usr_id = temp
         return st.session_state.usr_id
-
+       
 def login_screen_g():
-     # Domyślnie rozwinięty sidebar
-    st.sidebar.checkbox('Menu', value=True)
-    with st.sidebar: 
-        st.markdown('### Login by Google')
     
         try:
             add_auth(
@@ -44,14 +41,13 @@ def login_screen_g():
 
         
         if st.session_state.get('email'):
-            st.markdown(f"You logged by: {st.session_state['email']}")
+            # st.markdown(f"You logged by: {st.session_state['email']}")
             
-        connection=connect_to_db()
-        if db_login_email(connection, st.session_state.email): 
-            st.success("User exist!") 
-            st.query_params.update(logged_in=True)
-        disconnect(connection)
+            if db_login_email(connect_to_db(), st.session_state.email): 
+            # st.success("User exist!") 
+                st.query_params.update(logged_in=True)
+
+        
         return st.session_state.usr_id
-    
 
     
