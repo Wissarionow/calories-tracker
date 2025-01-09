@@ -54,7 +54,7 @@ def prepare_image_for_open_ai(image_path):
     return f"data:image/png;base64,{image_data}"
 
 
-def fill_meal(image,):
+def fill_meal(image, weight_goal):
     
     response = openAI_response(image)
    
