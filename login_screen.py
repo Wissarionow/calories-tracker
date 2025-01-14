@@ -1,11 +1,11 @@
-from database import connect_to_db, db_login, return_reqest, db_login_email
+from database import connect_to_db, db_login, return_reqest, db_login_email, disconnect
 import streamlit as st
 from st_paywall import add_auth  # type: ignore
 
 
 def login():
     login_screen_g()
-    # login_screen()
+    #login_screen()
     return st.session_state.usr_id
 
 def login_screen():
@@ -16,9 +16,10 @@ def login_screen():
         if st.button('Login'):
             connection = connect_to_db()
         
-            if db_login(connect_to_db(), username, password):
+            if db_login(connection, username, password):
                 st.success('Login successful')
                 st.session_state.usr_id = return_reqest(connect_to_db(), f"SELECT id FROM users WHERE username = '{username}' AND password = '{password}'")[0][0]
+                disconnect(connection)
             else:
                 st.error('Incorrect password or username')
 
@@ -49,5 +50,3 @@ def login_screen_g():
 
         
         return st.session_state.usr_id
-
-    

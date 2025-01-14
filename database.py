@@ -113,4 +113,3 @@ def db_user_goal(connection: Any, usr_id: int):
 
 def user_exists_check_by_email(email):
     db_login_email()
-
