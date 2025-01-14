@@ -49,9 +49,7 @@ def fill_calories_today(connection, usr_id,class_calories):
 
 
 def main():
-
     
-    st.set_page_config(page_title="Calories Tracker")
     #general session state variables
     if 'usr_intake' not in st.session_state:
         st.session_state.usr_intake = empty_calories_today()
