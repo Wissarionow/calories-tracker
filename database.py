@@ -2,13 +2,10 @@ import mysql.connector
 from mysql.connector import Error
 from typing import Any
 import streamlit as st
-import streamlit.components.v1 as components
 
 #establish connection, if None is returned, connection failed
-
 def connect_to_db():
-    #env = dotenv_values(".env")
-    print("CONNECTTION")
+
     try:
         connection = mysql.connector.connect(
         host=st.secrets['DB_HOST'],        
@@ -116,4 +113,3 @@ def db_user_goal(connection: Any, usr_id: int):
 
 def user_exists_check_by_email(email):
     db_login_email()
-

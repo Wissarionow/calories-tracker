@@ -2,6 +2,7 @@ from database import connect_to_db, db_login, return_reqest, db_login_email, dis
 import streamlit as st
 from st_paywall import add_auth  # type: ignore
 
+
 def login():
     login_screen_g()
     login_screen()
@@ -16,20 +17,18 @@ def login_screen():
             connection = connect_to_db()
         
             if db_login(connection, username, password):
+            if db_login(connection, username, password):
                 st.success('Login successful')
-                temp = return_reqest(connection, f"SELECT id FROM users WHERE username = '{username}' AND password = '{password}'")[0][0]
+                st.session_state.usr_id = return_reqest(connect_to_db(), f"SELECT id FROM users WHERE username = '{username}' AND password = '{password}'")[0][0]
+                disconnect(connection)
             else:
                 st.error('Incorrect password or username')
                 
             disconnect(connection)
             st.session_state.usr_id = temp
         return st.session_state.usr_id
-
+       
 def login_screen_g():
-     # Domyślnie rozwinięty sidebar
-    st.sidebar.checkbox('Menu', value=True)
-    with st.sidebar: 
-        st.markdown('### Login by Google')
     
         try:
             add_auth(
@@ -44,14 +43,11 @@ def login_screen_g():
 
         
         if st.session_state.get('email'):
-            st.markdown(f"You logged by: {st.session_state['email']}")
+            # st.markdown(f"You logged by: {st.session_state['email']}")
             
-        connection=connect_to_db()
-        if db_login_email(connection, st.session_state.email): 
-            st.success("User exist!") 
-            st.query_params.update(logged_in=True)
-        disconnect(connection)
-        return st.session_state.usr_id
-    
+            if db_login_email(connect_to_db(), st.session_state.email): 
+            # st.success("User exist!") 
+                st.query_params.update(logged_in=True)
 
-    
+        
+        return st.session_state.usr_id
