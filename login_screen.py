@@ -16,7 +16,7 @@ def login_screen():
         if st.button('Login'):
             connection = connect_to_db()
         
-            if db_login(connection, username, password):
+            
             if db_login(connection, username, password):
                 st.success('Login successful')
                 st.session_state.usr_id = return_reqest(connect_to_db(), f"SELECT id FROM users WHERE username = '{username}' AND password = '{password}'")[0][0]
@@ -24,8 +24,7 @@ def login_screen():
             else:
                 st.error('Incorrect password or username')
                 
-            disconnect(connection)
-            st.session_state.usr_id = temp
+            
         return st.session_state.usr_id
        
 def login_screen_g():
